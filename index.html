@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Little Date ❤️</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ffe0eb, #f8c6e5, #e6d8ff);
+  overflow-x: hidden;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 22px;
+  text-align: center;
+  background: rgba(255,255,255,0.92);
+  border-radius: 28px;
+  box-shadow: 0 15px 40px #b75c8640;
+  position: relative;
+  z-index: 1;
+}
+
+.heart {
+  font-size: 65px;
+  animation: heartbeat 1.3s infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+h1 {
+  color: #d6336c;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+p {
+  color: #775269;
+  line-height: 1.6;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin: 16px 0 7px;
+  color: #a52b61;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #efb4ce;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #fff8fb;
+  outline-color: #e83e73;
+}
+
+button {
+  border: none;
+  border-radius: 30px;
+  padding: 13px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+.yes {
+  background: #e83e73;
+  color: white;
+  margin: 8px 3px;
+}
+
+.maybe {
+  background: #ffe4ef;
+  color: #c02f69;
+  margin: 8px 3px;
+}
+
+.submit {
+  width: 100%;
+  background: #d6336c;
+  color: white;
+  margin-top: 22px;
+}
+
+#result {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  background: #fff0f6;
+  border-radius: 16px;
+  color: #b52860;
+  overflow-wrap: anywhere;
+}
+
+.heart-float {
+  position: fixed;
+  bottom: -30px;
+  animation: floatUp 6s linear forwards;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-110vh) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+.small {
+  font-size: 12px;
+  color: #a17b91;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="heart">💗</div>
+
+  <h1>Can I Take You on a Date?</h1>
+
+  <p>
+    Hey, you! 🥹💕<br>
+    You make ordinary moments feel special.
+    Would you like to spend some time with me?
+  </p>
+
+  <div>
+    <button class="yes" onclick="choose('Yes 💖')">
+      Yes! 💕
+    </button>
+
+    <button class="maybe" onclick="choose('Maybe 🙈')">
+      Maybe 🙈
+    </button>
+  </div>
+
+  <form id="dateForm">
+    <label for="date">📅 Choose our date</label>
+    <input type="date" id="date" required>
+
+    <label for="time">🕒 Choose our time</label>
+    <input type="time" id="time" required>
+
+    <label for="place">🌹 Where should we go?</label>
+    <select id="place" required>
+      <option value="">Choose a place</option>
+      <option value="A cute café ☕">A cute café ☕</option>
+      <option value="A sunset walk 🌅">A sunset walk 🌅</option>
+      <option value="A movie date 🎬">A movie date 🎬</option>
+      <option value="Dinner together 🍕">Dinner together 🍕</option>
+      <option value="Somewhere you choose 💕">
+        Somewhere you choose 💕
+      </option>
+    </select>
+
+    <label for="message">💌 A little message (optional)</label>
+    <input
+      type="text"
+      id="message"
+      placeholder="I can't wait to see you..."
+    >
+
+    <button type="submit" class="submit">
+      Make Our Date 💘
+    </button>
+  </form>
+
+  <div id="result" aria-live="polite"></div>
+
+  <p class="small">
+    Made with 💖 just for you
+  </p>
+</div>
+
+<script>
+let answer = "";
+
+function choose(value) {
+  answer = value;
+
+  if (value === "Yes 💖") {
+    alert("Yay! You made me smile! 💕");
+  } else {
+    alert("No pressure! Take your time 😊❤️");
+  }
+}
+
+const dateInput = document.getElementById("date");
+
+// Prevent selecting dates in the past
+const today = new Date();
+const localToday = [
+  today.getFullYear(),
+  String(today.getMonth() + 1).padStart(2, "0"),
+  String(today.getDate()).padStart(2, "0")
+].join("-");
+
+dateInput.min = localToday;
+
+document.getElementById("dateForm")
+.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const date = dateInput.value;
+  const time = document.getElementById("time").value;
+  const place = document.getElementById("place").value;
+  const message = document.getElementById("message").value;
+
+  const formattedDate = new Date(
+    date + "T12:00:00"
+  ).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+  const result = document.getElementById("result");
+  result.replaceChildren();
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Our Little Date 💕";
+
+  const details = document.createElement("p");
+  details.textContent =
+    "Your answer: " + (answer || "Not selected") +
+    "\nDate: " + formattedDate +
+    "\nTime: " + time +
+    "\nPlace: " + place +
+    (message ? "\nMessage: " + message : "");
+
+  details.style.whiteSpace = "pre-line";
+
+  const ending = document.createElement("p");
+  ending.textContent = "Can't wait to make memories with you! 💖";
+
+  result.append(heading, details, ending);
+  result.style.display = "block";
+
+  result.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+
+  for (let i = 0; i < 20; i++) {
+    setTimeout(createHeart, i * 100);
+  }
+});
+
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart-float";
+  heart.textContent = ["💗", "💕", "💖", "❤️"][
+    Math.floor(Math.random() * 4)
+  ];
+
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (18 + Math.random() * 20) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 6000);
+}
+</script>
+
+</body>
+</html>
